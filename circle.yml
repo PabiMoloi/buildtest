@@ -16,7 +16,9 @@ dependencies:
         - chmod +x gradlew
         - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 
-test:
-  override:
-    - ./gradlew assembleRelease
-    - cp -r project buildserver/build/outputs $CIRCLE_ARTIFACTS
+store_artifacts:
+path: app/build/reports
+destination: reports
+
+store_test_results:
+path: app/build/test-results
