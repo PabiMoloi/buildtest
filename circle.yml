@@ -16,3 +16,7 @@ dependencies:
         - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-26.0.2,android-26
         - chmod +x gradlew
         - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
+test:
+  override:
+    - ./gradlew assembleRelease
+    - cp -r  buildserver/build/outputs $CIRCLE_ARTIFACTS
