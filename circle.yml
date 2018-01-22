@@ -1,22 +1,21 @@
-#
-# Build configuration for Circle CI
-#
-
-general:
-    artifacts:
-        - /home/ubuntu/buildtest/app/build/outputs/apk/
-
-machine:
+version: 2
+jobs:
+  build:
+    working_directory: ~/code
     environment:
-        ANDROID_HOME: /usr/local/android-sdk-linux
-
-dependencies:
-    override:
-        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-26.0.2,android-26
-        - chmod +x gradlew
-        - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
-steps: 
-- run:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
           name: Run Tests
           command: ./gradlew lint test
       - store_artifacts:
@@ -24,3 +23,4 @@ steps:
           destination: reports
       - store_test_results:
           path: app/build/test-results
+
