@@ -16,7 +16,9 @@ dependencies:
         - chmod +x gradlew
         - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 
-test:
-  override:
-    - ./gradlew assembleRelease
-    - cp -r buildserver/build/outputs $CIRCLE_ARTIFACTS
+- run:
+          name: Initial build
+          command: ./gradlew clean assembleRelease --no-daemon --stacktrace
+      - store_artifacts:
+          path: app/build/outputs/apk/
+          destination: apks/
