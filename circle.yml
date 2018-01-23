@@ -20,7 +20,7 @@ test:
 
   pre:
       - android list targets
-      - android create avd --name Default --target android-26 
+      - android create avd --name Default --target android-26 --abi no ABIs
       - echo 'vm.heapSize=512' >> ~/.android/avd/emulatorwithgoogleapi26.ini
       - echo 'hw.ramSize=1024' >> ~/.android/avd/emulatorwithgoogleapi26.ini
       - cat ~/.android/avd/emulatorwithgoogleapi26.ini
