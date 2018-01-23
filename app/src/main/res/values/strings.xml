@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">buildtest</string>
+    <string name="homescreen_buttonTitle">Do Something</string>
 </resources>
