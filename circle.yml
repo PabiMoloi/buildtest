@@ -12,7 +12,7 @@ machine:
 
 dependencies:
     override:
-        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-26.0.2,android-26,extra-google-google_play_service,android-22
+        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-26.0.2,android-26,extra-google-google_play_services
         - chmod +x gradlew
         - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 
@@ -20,11 +20,14 @@ test:
 
   pre:
       - android list targets
-      -emulator -avd circleci-android22 -no-audio -no-window:
+      - echo no | android create avd -n custom-android22-googleapis -t "android-22" --abi default/armeabi-v7a
+      - echo 'vm.heapSize=512' >> ~/.android/avd/emulatorwithgoogleapi22.ini
+      - echo 'hw.ramSize=1024' >> ~/.android/avd/emulatorwithgoogleapi22.ini
+      - cat ~/.android/avd/emulatorwithgoogleapi22.ini
+      - emulator -avd circleci-android22 -no-audio -no-window:
           background: true
           parallel: true
       - circle-android wait-for-boot
-      - sleep 30
       - adb shell input keyevent 82
       - adb shell svc power stayon true
       - adb shell settings put global window_animation_scale 0
